@@ -1,35 +1,37 @@
+require('dotenv').config();
 const express = require('express');
-const openai = require('openai');
+const { OpenAI } = require('openai');  // Import OpenAI SDK
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const AdmZip = require('adm-zip');
 const path = require('path');
-require('dotenv').config();
 
 const app = express();
 app.use(express.json());  // To parse JSON bodies
 app.use(express.urlencoded({ extended: true }));  // For form-encoded data
 
 // Set up OpenAI API
-openai.apiKey = process.env.APIKEY;
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,  // Use your API key from the environment variable
+});
 
 // Endpoint to handle form submission
 app.post('/submit', async (req, res) => {
     const { companyName, contactInfo, clientContactInfo, industry, mood, contentType, platforms, timeframe, targetClients, marketingPoints, seasonalPromotions, additionalInfo } = req.body;
 
     // Prepare the prompt for GPT-4
-    const prompt = `Generate marketing materials for ${companyName} in the ${industry} industry...`;
-    // Add more to the prompt using the collected data
+    const prompt = `Generate marketing materials for ${companyName} in the ${industry} industry...` + 
+                   `Targeting ${targetClients} with a focus on ${marketingPoints} and considering ${seasonalPromotions}.`;
 
     try {
         // Call GPT-4 API to generate marketing materials
-        const response = await openai.completions.create({
+        const response = await openai.chat.completions.create({
             model: 'gpt-4',
-            prompt: prompt,
+            messages: [{ role: 'user', content: prompt }],
             max_tokens: 1500
         });
 
-        const materials = response.choices[0].text;
+        const materials = response.choices[0].message.content;
 
         // Create a zip file with the marketing materials
         const zip = new AdmZip();
