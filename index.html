@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Materials Request</title>
+</head>
+<body>
+    <h2>Request Marketing Materials</h2>
+    <form action="/submit" method="POST">
+        <label for="companyName">Name of Company:</label>
+        <input type="text" id="companyName" name="companyName" required><br><br>
+
+        <label for="contactInfo">Contact Information:</label>
+        <input type="text" id="contactInfo" name="contactInfo" required><br><br>
+
+        <label for="clientContactInfo">Client Contact Information:</label>
+        <input type="text" id="clientContactInfo" name="clientContactInfo"><br><br>
+
+        <label for="industry">Industry:</label>
+        <input type="text" id="industry" name="industry" required><br><br>
+
+        <label for="mood">Mood for Marketing Emails:</label>
+        <select id="mood" name="mood">
+            <option value="Professional">Professional</option>
+            <option value="Casual">Casual</option>
+            <option value="Fun and Exciting">Fun and Exciting</option>
+            <option value="Formal">Formal</option>
+        </select><br><br>
+
+        <label for="contentType">Type of Content Needed:</label><br>
+        <input type="checkbox" name="contentType" value="Holiday Emails"> Holiday Emails<br>
+        <input type="checkbox" name="contentType" value="Social Media Posts"> Social Media Posts<br>
+        <input type="checkbox" name="contentType" value="Blog Posts"> Blog Posts<br>
+        <input type="checkbox" name="contentType" value="Ad Campaigns"> Ad Campaigns<br><br>
+
+        <label for="platforms">Social Media Platforms (if any):</label>
+        <input type="text" id="platforms" name="platforms"><br><br>
+
+        <label for="timeframe">Timeframe for Marketing Materials:</label>
+        <input type="text" id="timeframe" name="timeframe" required><br><br>
+
+        <label for="targetClients">Target Clients:</label>
+        <input type="text" id="targetClients" name="targetClients"><br><br>
+
+        <label for="marketingPoints">Key Marketing Points:</label>
+        <textarea id="marketingPoints" name="marketingPoints" rows="4" cols="50"></textarea><br><br>
+
+        <label for="seasonalPromotions">Seasonal Promotions:</label>
+        <input type="text" id="seasonalPromotions" name="seasonalPromotions"><br><br>
+
+        <label for="additionalInfo">Additional Information:</label>
+        <textarea id="additionalInfo" name="additionalInfo" rows="4" cols="50"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
