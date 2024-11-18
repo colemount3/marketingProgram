@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "dotenv": "^16.4.5",
+    "nodemailer": "^6.9.16",
+    "openai": "^4.72.0"
+  }
+}
