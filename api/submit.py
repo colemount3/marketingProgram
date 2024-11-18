@@ -1,41 +1,23 @@
-# api/submit.py
-from http.server import BaseHTTPRequestHandler
 import json
 
-class handler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        # Parse the content length
-        content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length)
-        
-        # Parse the JSON body
+def handler(request):
+    if request.method == "POST":
         try:
-            data = json.loads(post_data)
-            # Extract data from the request
-            company_name = data.get("companyName")
-            contact_info = data.get("contactInfo")
-            client_contact_info = data.get("clientContactInfo")
-            industry = data.get("industry")
-            mood = data.get("mood")
-            content_type = data.get("contentType")
-            platforms = data.get("platforms")
-            timeframe = data.get("timeframe")
-            target_clients = data.get("targetClients")
-            marketing_points = data.get("marketingPoints")
-            seasonal_promotions = data.get("seasonalPromotions")
-            additional_info = data.get("additionalInfo")
-
-            # Here, handle the form submission (e.g., save to a database, send an email, etc.)
-            print("Form Data:", data)
-
-            # Send a success response
-            self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps({"message": "Form submitted successfully!"}).encode("utf-8"))
+            # Retrieve JSON data from the POST request body
+            body = request.json()  # Assuming the frontend sends JSON data
+            
+            # Check if all required fields are provided (you can validate here)
+            if 'companyName' not in body or 'contactInfo' not in body:
+                return json.dumps({"error": "Missing required fields"}), 400
+            
+            # For debugging, log the received data
+            print(f"Received data: {body}")
+            
+            # Process the form data, save it, or trigger another action as needed.
+            # Example response:
+            return json.dumps({"message": "Form submitted successfully!"}), 200
         except Exception as e:
-            # Handle errors
-            self.send_response(500)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            self.wfile.write(json.dumps({"error": str(e)}).encode("utf-8"))
+            # Handle errors gracefully and return an error message
+            return json.dumps({"error": f"Server error: {str(e)}"}), 500
+    else:
+        return json.dumps({"error": "Invalid request method"}), 405
