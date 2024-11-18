@@ -1,11 +1,13 @@
-const openai = require('openai');
+const { OpenAI } = require('openai');  // Import OpenAI SDK
 const nodemailer = require('nodemailer');
 const AdmZip = require('adm-zip');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-openai.apiKey = process.env.APIKEY;
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,  // Initialize OpenAI with API key from environment
+});
 
 module.exports = async (req, res) => {
     if (req.method === 'POST') {
@@ -16,13 +18,13 @@ module.exports = async (req, res) => {
 
         try {
             // Call GPT-4 API to generate marketing materials
-            const response = await openai.completions.create({
+            const response = await openai.chat.completions.create({
                 model: 'gpt-4',
-                prompt: prompt,
-                max_tokens: 1500
+                messages: [{ role: 'user', content: prompt }],
+                max_tokens: 1500,
             });
 
-            const materials = response.choices[0].text;
+            const materials = response.choices[0].message.content;
 
             // Create a zip file with the marketing materials
             const zip = new AdmZip();
@@ -38,8 +40,8 @@ module.exports = async (req, res) => {
                 service: 'gmail',
                 auth: {
                     user: process.env.EMAIL,
-                    pass: process.env.PW
-                }
+                    pass: process.env.PW,
+                },
             });
 
             const mailOptions = {
@@ -49,8 +51,8 @@ module.exports = async (req, res) => {
                 text: 'Please find your marketing materials attached.',
                 attachments: [{
                     filename: 'marketing_materials.zip',
-                    content: zip.toBuffer()
-                }]
+                    content: zip.toBuffer(),
+                }],
             };
 
             transporter.sendMail(mailOptions, (err, info) => {
